@@ -1,0 +1,33 @@
+.background-top {
+  background-color: #252b48;
+  width: 100%;
+}
+
+.background-end {
+  background-color: #5b9a8b;
+  width: 100%;
+  height: 310px;
+}
+
+.content {
+  display: flex;
+}
+
+.title {
+  color: #f7e987;
+  font-size: 120px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.columns {
+  display: flex;
+  text-align: justify;
+  font-size: 20px;
+  column-gap: 300px;
+
+  margin-left: 110px;
+  margin-right: 110px;
+  margin-top: 110px;
+}
