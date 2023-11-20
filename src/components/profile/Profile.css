@@ -1,0 +1,35 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.background {
+  background-color: #252b48;
+  height: 100vh;
+  padding: 20px;
+}
+
+.title {
+  color: #f7e987;
+  font-size: 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 110px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.delete-button,
+.edit-button {
+  width: auto;
+  margin-left: 10px;
+}
+
+.delete-button {
+  color: red;
+}

@@ -2,13 +2,18 @@ nav ul {
   list-style: none;
   display: flex;
   justify-content: space-between;
+  background-color: #445069;
+  margin: 0;
+  padding: 10px;
 }
 
 nav li {
-  margin-right: 20px;
+  margin-right: 110px;
+  margin-left: 110px;
 }
 
 nav a {
   text-decoration: none;
   color: #aec3b0;
+  font-size: 20px;
 }

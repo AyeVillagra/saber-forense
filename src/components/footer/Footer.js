@@ -4,6 +4,7 @@ import "./Footer.css";
 function Footer() {
   return (
     <footer className="footer">
+      <br></br>
       <p>Saber Forense © 2023 </p>
       <p>
         <i>
