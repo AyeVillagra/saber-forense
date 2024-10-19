@@ -33,3 +33,8 @@ button {
 button:hover {
   background-color: #344356;
 }
+
+.error {
+  color: red;
+  font-size: 11px;
+}

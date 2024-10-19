@@ -31,7 +31,8 @@ const Profile = () => {
           <strong>Apellido:</strong> {userData.lastName}
         </div>
         <div>
-          <strong>Dirección:</strong> {userData.address}
+          <strong>Dirección:</strong> {userData.address}{" "}
+          {userData.addressNumber}
         </div>
         <div>
           <strong>Mis Cursos:</strong>
