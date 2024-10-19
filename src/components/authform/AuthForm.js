@@ -112,7 +112,17 @@ const AuthForm = () => {
 
       setLoginError("");
 
-      navigate("/profile", { state: responseData.data });
+      if (isRegistering) {
+        alert(responseData.message);
+      }
+
+      const userRole = responseData.role;
+      console.log("Rol del usuario:", userRole);
+      if (userRole === "SYSADMIN") {
+        navigate("/sysadmin");
+      } else {
+        navigate("/profile", { state: responseData.data });
+      }
     } catch (error) {
       console.error(
         `Error al ${isRegistering ? "registrar" : "iniciar sesión"}:`,
@@ -191,6 +201,7 @@ const AuthForm = () => {
                 e.preventDefault();
               }
             }}
+            maxLength={5}
           />
           {errors.addressNumber && (
             <p className="error">{errors.addressNumber}</p>
