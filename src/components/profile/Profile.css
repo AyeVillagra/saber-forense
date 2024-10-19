@@ -25,7 +25,8 @@
 }
 
 .delete-button,
-.edit-button {
+.edit-button,
+.logout-button {
   width: auto;
   margin-left: 10px;
 }

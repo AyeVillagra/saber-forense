@@ -12,6 +12,10 @@ const Profile = () => {
     console.log("Eliminando cuenta...");
   };
 
+  const handleLogout = async () => {
+    console.log("Cerrando sesión...");
+  };
+
   return (
     <div className="page-container">
       <div className="background">
@@ -38,6 +42,9 @@ const Profile = () => {
           </Link>
           <button onClick={handleDeleteAccount} className="delete-button">
             Eliminar Cuenta
+          </button>
+          <button onClick={handleLogout} className="logout-button">
+            Cerrar Sesión
           </button>
         </div>
       </div>
