@@ -19,21 +19,18 @@ const AuthForm = () => {
     const formErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Validación del email
     if (!email) {
       formErrors.email = "El email es obligatorio.";
     } else if (!emailRegex.test(email)) {
       formErrors.email = "El email no tiene un formato válido.";
     }
 
-    // Validación de la contraseña
     if (!password) {
       formErrors.password = "La contraseña es obligatoria.";
     } else if (password.length < 8) {
       formErrors.password = "La contraseña debe tener al menos 8 caracteres.";
     }
 
-    // Validaciones adicionales para registro
     if (isRegistering) {
       if (!name) formErrors.name = "El nombre es obligatorio.";
       if (!lastName) formErrors.lastName = "El apellido es obligatorio.";
@@ -115,6 +112,9 @@ const AuthForm = () => {
       if (isRegistering) {
         alert(responseData.message);
       }
+
+      localStorage.setItem("userData", JSON.stringify(responseData.data));
+      localStorage.setItem("userRole", responseData.role);
 
       const userRole = responseData.role;
       console.log("Rol del usuario:", userRole);

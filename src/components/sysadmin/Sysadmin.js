@@ -4,8 +4,6 @@ import "react-data-grid/lib/styles.css";
 
 const SysAdminDashboard = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado para errores
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -19,9 +17,7 @@ const SysAdminDashboard = () => {
         const usersData = await response.json();
         setUsers(usersData);
       } catch (error) {
-        setError(error.message);
       } finally {
-        setLoading(false);
       }
     };
 
@@ -29,22 +25,29 @@ const SysAdminDashboard = () => {
   }, []);
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "name", name: "Nombre" },
-    { key: "email", name: "Email" },
+    { key: "id", name: "ID", width: 100 },
+    { key: "name", name: "Nombre", width: 200 },
+    { key: "email", name: "Email", width: 250 },
+    { key: "address", name: "Domicilio", width: 300 },
+    { key: "addressNumber", name: "Número", width: 300 },
+    { key: "role", name: "Tipo de usuario", width: 200 },
   ];
 
-  if (loading) {
-    return <div>Cargando usuarios...</div>;
-  }
-
-  if (error) {
-    return <div>Error al cargar usuarios: {error}</div>;
-  }
+  const handleLogout = async () => {
+    console.log("Cerrando sesión...");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    window.location.href = "/";
+  };
 
   return (
     <div>
-      <h1>Dashboard del Sysadmin</h1>
+      <div className="header">
+        <h1>Dashboard administrador</h1>
+        <button onClick={handleLogout} className="logout-button">
+          Cerrar Sesión
+        </button>
+      </div>
       <h2>Usuarios</h2>
       <DataGrid columns={columns} rows={users} />
       <h2>Cursos</h2>

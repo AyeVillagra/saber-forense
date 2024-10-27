@@ -1,0 +1,18 @@
+.not-found {
+  text-align: center;
+  padding: 50px;
+}
+
+.not-found h1 {
+  font-size: 48px;
+  color: #ff0000; /* Rojo para el mensaje de error */
+}
+
+.not-found p {
+  font-size: 24px;
+}
+
+.not-found a {
+  color: blue;
+  text-decoration: underline;
+}
