@@ -5,6 +5,7 @@ import Profile from "./components/profile/Profile";
 import SysAdminDashboard from "./components/sysadmin/Sysadmin";
 import NotFound from "./components/404/NotFound";
 import About from "./components/about/About";
+import Courses from "./components/courses/Courses";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -13,6 +14,7 @@ const App = () => {
     { path: "/sysadmin", element: <SysAdminDashboard /> },
     { path: "*", element: <NotFound /> },
     { path: "/about", element: <About /> },
+    { path: "/courses", element: <Courses /> },
   ]);
 
   return (
