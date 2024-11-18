@@ -12,6 +12,11 @@ const AuthForm = () => {
   const [addressNumber, setAddressNumber] = useState("");
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const navigate = useNavigate();
 
@@ -120,6 +125,8 @@ const AuthForm = () => {
       console.log("Rol del usuario:", userRole);
       if (userRole === "SYSADMIN") {
         navigate("/sysadmin");
+      } else if (userRole === "ADMIN") {
+        navigate("/admin");
       } else {
         navigate("/profile", { state: responseData.data });
       }
@@ -142,13 +149,30 @@ const AuthForm = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
       {errors.email && <p className="error">{errors.email}</p>}
-      <input
-        className="input"
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+
+      <div className="password-input-container">
+        <input
+          className="input"
+          type={showPassword ? "text" : "password"}
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <span
+          className="password-toggle-btn"
+          onClick={togglePasswordVisibility}
+        >
+          {showPassword ? (
+            <span role="img" aria-label="ocultar contraseña">
+              👁️
+            </span>
+          ) : (
+            <span role="img" aria-label="ver contraseña">
+              👁️‍🗨️
+            </span>
+          )}
+        </span>
+      </div>
       {errors.password && <p className="error">{errors.password}</p>}
       {loginError && <p className="error">{loginError}</p>}
       {isRegistering && (

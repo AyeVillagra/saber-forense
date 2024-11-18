@@ -4,24 +4,30 @@
 }
 
 .background {
-  background-color: #252b48;
+  background-color: white;
   height: 100vh;
   padding: 20px;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: #252b48;
 }
 
 .title {
   color: #f7e987;
-  font-size: 60px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-left: 110px;
+  font-size: 30px;
+  margin-left: 20px;
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  gap: 10px;
+  margin-right: 5px;
 }
 
 .delete-button,
