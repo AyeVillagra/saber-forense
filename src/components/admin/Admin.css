@@ -3,31 +3,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
-
-input {
-  padding: 8px;
-  margin: 10px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 8px 12px;
-  margin-top: 10px;
-  background-color: #445069;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding-right: 20px;
 }
 
 button:hover {
   background-color: #344356;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
 }

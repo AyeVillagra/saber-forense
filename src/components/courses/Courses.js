@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
+import Footer from "../footer/Footer";
+import "./Courses.css";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
@@ -9,7 +11,6 @@ function Courses() {
       try {
         const endpoint = "/courses";
 
-        // Realiza la solicitud al backend
         const response = await fetch(`http://localhost:8080${endpoint}`, {
           method: "GET",
           headers: {
@@ -32,17 +33,22 @@ function Courses() {
   }, []);
 
   return (
-    <div>
+    <div className="page-container">
       <Navbar />
-      <h1>Cursos</h1>
-      <ul>
-        {courses.map((course) => (
-          <li key={course.id}>
-            <h2>{course.name}</h2>
-            <p>{course.description}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="content-wrap">
+        <div className="courses-container">
+          <h1>Cursos</h1>
+          <ul>
+            {courses.map((course) => (
+              <li key={course.id}>
+                <h2>{course.name}</h2>
+                <p>{course.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }

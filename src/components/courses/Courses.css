@@ -1,0 +1,13 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+}
+
+.content-wrap {
+  flex: 1; /* Esto empuja al footer hacia abajo si el contenido no ocupa suficiente espacio */
+}
+
+.courses-container {
+  padding: 20px;
+}
