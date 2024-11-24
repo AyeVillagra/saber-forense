@@ -39,3 +39,8 @@
   color: red;
   font-weight: bold;
 }
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import "./Courses.css";
+import { useInscriptions } from "../../context/InscriptionContext";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
@@ -10,6 +11,7 @@ function Courses() {
   const [error, setError] = useState("");
   const [userData] = useState(JSON.parse(localStorage.getItem("userData")));
   const navigate = useNavigate();
+  const { inscriptions, loadInscriptions } = useInscriptions();
 
   const searchCourseByName = async (name) => {
     if (name.trim() === "") {
@@ -102,13 +104,22 @@ function Courses() {
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    fetchCourses(); // Esto se ejecuta al cargar el componente
+    if (userData) {
+      loadInscriptions(); // Cargar inscripciones solo si hay usuario
+    }
+  }, [userData]); // Solo depende de userData, no de loadInscriptions
 
   const handleShowAllCourses = () => {
     fetchCourses();
     setSearchTerm("");
   };
+
+  const isUserSubscribed = (courseId) =>
+    inscriptions.some(
+      (inscription) =>
+        inscription.courseId === courseId && inscription.active === true
+    );
 
   return (
     <div className="page-container">
@@ -151,8 +162,13 @@ function Courses() {
                       <p>No hay imagen disponible</p>
                     )}
                     {userData && (
-                      <button onClick={() => handleSubscribe(course.id)}>
-                        Inscribirme
+                      <button
+                        onClick={() => handleSubscribe(course.id)}
+                        disabled={isUserSubscribed(course.id)}
+                      >
+                        {isUserSubscribed(course.id)
+                          ? "Ya estás inscrito"
+                          : "Inscribirme"}
                       </button>
                     )}
                   </li>
