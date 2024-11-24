@@ -4,6 +4,8 @@ import "react-data-grid/lib/styles.css";
 import Navbar from "../navbar/Navbar";
 import "./Admin.css";
 import Footer from "../footer/Footer";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Admin = () => {
   const [courses, setCourses] = useState([]);
@@ -76,17 +78,17 @@ const Admin = () => {
       const response = await fetch(`http://localhost:8080/courses/${id}`, {
         method: "DELETE",
       });
-
-      if (!response.ok) {
-        throw new Error("Error al eliminar el curso");
+      if (response.ok) {
+        toast.success("Curso eliminado con éxito");
+        setCourses((prevCourses) =>
+          prevCourses.filter((course) => course.id !== id)
+        );
+      } else {
+        const errorMessage = await response.text();
+        toast.error(`Error al eliminar el curso: ${errorMessage}`);
       }
-
-      setCourses((prevCourses) =>
-        prevCourses.filter((course) => course.id !== id)
-      );
-      alert("Curso eliminado con éxito");
     } catch (error) {
-      alert("No se pudo eliminar el curso. Intenta de nuevo.");
+      toast.error(`Error al eliminar el curso: ${error.message}`);
     }
   };
 
@@ -125,12 +127,19 @@ const Admin = () => {
       }
 
       const newCourse = await response.json();
+      toast.success("¡Curso agregado con éxito!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       setCourses((prevCourses) => [...prevCourses, newCourse]);
 
       handleCloseModal();
     } catch (error) {
-      console.error("Error al guardar el curso:", error.message);
-      alert("No se pudo guardar el curso: " + error.message);
+      toast.error(`Error al eliminar el curso: ${error.message}`);
     }
   };
 
@@ -198,6 +207,7 @@ const Admin = () => {
         )}
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };
