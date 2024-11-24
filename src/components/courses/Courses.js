@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import "./Courses.css";
@@ -7,6 +8,8 @@ function Courses() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
+  const [userData] = useState(JSON.parse(localStorage.getItem("userData")));
+  const navigate = useNavigate();
 
   const searchCourseByName = async (name) => {
     if (name.trim() === "") {
@@ -63,6 +66,41 @@ function Courses() {
     }
   };
 
+  const handleSubscribe = async (courseId) => {
+    if (!userData) {
+      alert("Debes iniciar sesión para inscribirte en un curso.");
+      return;
+    }
+
+    const inscriptionData = {
+      user: { id: userData.id },
+      course: { id: courseId },
+      active: true,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/inscripciones`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inscriptionData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.message || "Hubo un error al inscribirse.");
+        return;
+      }
+
+      alert(data.message || "Te has inscrito correctamente.");
+      navigate("/profile", { state: userData });
+    } catch (error) {
+      console.error("Error al inscribirse:", error);
+      alert("Hubo un problema al intentar inscribirte.");
+    }
+  };
+
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -111,6 +149,11 @@ function Courses() {
                       />
                     ) : (
                       <p>No hay imagen disponible</p>
+                    )}
+                    {userData && (
+                      <button onClick={() => handleSubscribe(course.id)}>
+                        Inscribirme
+                      </button>
                     )}
                   </li>
                 ))

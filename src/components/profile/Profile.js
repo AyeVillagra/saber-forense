@@ -5,8 +5,9 @@ import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 
 const Profile = () => {
-  const userData = useLocation().state;
-  const [userDetails] = useState(userData);
+  const location = useLocation();
+  const userDetails = location.state;
+  /*const [userDetails] = useState(userData);*/
   const [inscriptions, setInscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,11 +36,14 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const storedUserData = JSON.parse(localStorage.getItem("userData"));
-    if (storedUserData) {
-      fetchInscriptions(storedUserData.id);
+    if (userDetails) {
+      fetchInscriptions(userDetails.id);
     }
   }, [userDetails]);
+
+  if (!userDetails) {
+    return <p>No se pudo cargar la información del usuario.</p>;
+  }
 
   const handleDeleteAccount = async () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta?")) {
@@ -128,7 +132,7 @@ const Profile = () => {
                     ).toLocaleDateString()}{" "}
                     <br />
                     <strong>Estado:</strong>{" "}
-                    {inscription.is_active ? (
+                    {inscription.active ? (
                       <span style={{ color: "green" }}>Inscripto</span>
                     ) : (
                       <span style={{ color: "red" }}>Dado de baja</span>
