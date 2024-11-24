@@ -1,13 +1,3 @@
-.page-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.background {
-  background-color: white;
-  height: 100vh;
-  padding: 20px;
-}
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -39,4 +29,39 @@
 
 .delete-button {
   color: red;
+}
+
+.unsubscribe-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.unsubscribe-button:hover {
+  background-color: darkred;
+}
+
+/* Asegúrate de que el contenedor principal usa flexbox */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garantiza que ocupe al menos el 100% de la altura de la ventana */
+}
+
+/* La clase .background debe ocupar el espacio disponible */
+.background {
+  flex: 1; /* Esto hace que el contenido principal se expanda para llenar el espacio disponible */
+  padding: 20px;
+}
+
+/* Footer siempre al final */
+.footer {
+  background-color: #f7e987;
+  height: 100px;
+  width: 100%;
+  text-align: center;
+  position: relative; /* Asegúrate de que el footer no se quede fijo en la parte inferior */
 }

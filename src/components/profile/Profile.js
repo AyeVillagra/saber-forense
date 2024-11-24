@@ -80,7 +80,36 @@ const Profile = () => {
   const handleLogout = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
-    navigate("/"); // Redirigir al inicio
+    navigate("/");
+  };
+
+  const handleUnsubscribe = async (inscriptionId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/inscripciones/${inscriptionId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudo dar de baja la inscripción.");
+      }
+
+      setInscriptions((prevInscriptions) =>
+        prevInscriptions.map((inscription) =>
+          inscription.id === inscriptionId
+            ? { ...inscription, active: false } // Marcar la inscripción como inactiva
+            : inscription
+        )
+      );
+    } catch (error) {
+      console.error("Error al dar de baja:", error);
+      alert("Hubo un problema al intentar dar de baja.");
+    }
   };
 
   return (
@@ -136,6 +165,14 @@ const Profile = () => {
                       <span style={{ color: "green" }}>Inscripto</span>
                     ) : (
                       <span style={{ color: "red" }}>Dado de baja</span>
+                    )}
+                    {inscription.active && (
+                      <button
+                        onClick={() => handleUnsubscribe(inscription.id)}
+                        className="unsubscribe-button"
+                      >
+                        Dar de baja
+                      </button>
                     )}
                     <br />
                   </li>
