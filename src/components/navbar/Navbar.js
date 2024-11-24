@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
   const location = useLocation();
-  const userData = JSON.parse(localStorage.getItem("userData")); // Verifica si el usuario está autenticado
+
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem("userData"))
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserData(JSON.parse(localStorage.getItem("userData")));
+    };
+
+    // Escucha cambios en localStorage
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <nav>
