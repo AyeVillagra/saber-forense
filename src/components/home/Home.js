@@ -5,12 +5,13 @@ import Footer from "../footer/Footer";
 import AuthForm from "../authform/AuthForm";
 
 function Home() {
+  const isLoggedIn = !!localStorage.getItem("userData");
   return (
     <div className="background-top">
       <Navbar />
       <div className="content">
         <h1 className="title">Saber Forense</h1>
-        <AuthForm />
+        {!isLoggedIn && <AuthForm />}
       </div>
 
       <div className="columns">

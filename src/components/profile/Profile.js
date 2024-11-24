@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Profile.css";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 
 const Profile = () => {
   const userData = useLocation().state;
+  const [userDetails, setUserDetails] = useState(userData); // Datos del usuario
+  const [formData, setFormData] = useState({}); // Datos del formulario
+  const [isEditing, setIsEditing] = useState(false); // Estado de edición
   const [inscriptions, setInscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,7 +28,6 @@ const Profile = () => {
         throw new Error("Error al obtener inscripciones");
       }
       const data = await response.json();
-      console.log(data);
       setInscriptions(data);
       setLoading(false);
     } catch (error) {
@@ -35,16 +37,63 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (userData && userData.id) {
-      fetchInscriptions(userData.id);
+    const storedUserData = JSON.parse(localStorage.getItem("userData"));
+    if (storedUserData) {
+      fetchInscriptions(storedUserData.id);
     }
-  }, [userData]);
+    setFormData({
+      name: userDetails.name || "",
+      lastName: userDetails.lastName || "",
+      address: userDetails.address || "",
+      addressNumber: userDetails.addressNumber || "",
+      email: userDetails.email || "",
+    });
+  }, [userDetails]);
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:8080/usuarios/perfil/${userData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Hubo un error al actualizar el perfil.");
+        return;
+      }
+
+      const updatedUser = await response.json();
+      alert("Perfil actualizado correctamente.");
+      setUserDetails(updatedUser); // Actualiza los datos mostrados
+      setIsEditing(false); // Cambia a modo de visualización
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      alert("Hubo un problema al intentar actualizar el perfil.");
+    }
+  };
 
   const handleDeleteAccount = async () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta?")) {
       try {
         const response = await fetch(
-          `http://localhost:8080/usuarios/${userData.id}`,
+          `http://localhost:8080/usuarios/${userDetails.id}`,
           {
             method: "DELETE",
             headers: {
@@ -70,11 +119,10 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = async () => {
-    console.log("Cerrando sesión...");
+  const handleLogout = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
-    window.location.href = "/";
+    navigate("/"); // Redirigir al inicio
   };
 
   return (
@@ -84,9 +132,9 @@ const Profile = () => {
         <div className="header-container">
           <h3 className="title">Perfil de Usuario</h3>
           <div className="button-container">
-            <Link to="/editar-datos">
-              <button className="edit-button">Editar Perfil</button>
-            </Link>
+            <button onClick={handleEditToggle} className="edit-button">
+              {isEditing ? "Cancelar Edición" : "Editar Perfil"}
+            </button>
             <button onClick={handleDeleteAccount} className="delete-button">
               Eliminar Cuenta
             </button>
@@ -95,21 +143,76 @@ const Profile = () => {
             </button>
           </div>
         </div>
+        {isEditing ? (
+          <form onSubmit={handleSave} className="edit-form">
+            <label>
+              Nombre:
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Apellido:
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Dirección:
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Número:
+              <input
+                type="text"
+                name="addressNumber"
+                value={formData.addressNumber}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </label>
+            <button type="submit" className="save-button">
+              Guardar Cambios
+            </button>
+          </form>
+        ) : (
+          <div>
+            <p>
+              <strong>Email:</strong> {userDetails.email}
+            </p>
+            <p>
+              <strong>Nombre:</strong> {userDetails.name}
+            </p>
+            <p>
+              <strong>Apellido:</strong> {userDetails.lastName}
+            </p>
+            <p>
+              <strong>Dirección:</strong> {userDetails.address}{" "}
+              {userDetails.addressNumber}
+            </p>
+          </div>
+        )}
         <div>
-          <strong>Email:</strong> {userData.email}
-        </div>
-        <div>
-          <strong>Nombre:</strong> {userData.name}
-        </div>
-        <div>
-          <strong>Apellido:</strong> {userData.lastName}
-        </div>
-        <div>
-          <strong>Dirección:</strong> {userData.address}{" "}
-          {userData.addressNumber}
-        </div>
-        <div>
-          <strong>Mis Cursos:</strong>
+          <h4>Mis Cursos:</h4>
           {loading ? (
             <p>Cargando inscripciones...</p>
           ) : error ? (

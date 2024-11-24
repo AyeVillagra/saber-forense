@@ -11,3 +11,31 @@
 .courses-container {
   padding: 20px;
 }
+
+.course-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-top: 10px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 8px;
+  margin-right: 10px;
+  width: 300px;
+}
+
+.search-bar button {
+  padding: 8px 15px;
+  cursor: pointer;
+  width: 300px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
