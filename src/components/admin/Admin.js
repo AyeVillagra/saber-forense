@@ -127,14 +127,7 @@ const Admin = () => {
       }
 
       const newCourse = await response.json();
-      toast.success("¡Curso agregado con éxito!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success("¡Curso agregado con éxito!");
       setCourses((prevCourses) => [...prevCourses, newCourse]);
 
       handleCloseModal();
