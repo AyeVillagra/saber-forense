@@ -15,6 +15,7 @@ const Admin = () => {
     description: "",
     imageUrls: [],
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -34,10 +35,11 @@ const Admin = () => {
 
     fetchCourses();
   }, []);
+
   const columns = [
     { key: "id", name: "ID", width: 100 },
     { key: "name", name: "Nombre del Curso", width: 250 },
-    { key: "description", name: "Descripción", width: 300 },
+    { key: "description", name: "Descripción", width: 600 },
     {
       key: "action",
       name: "Acción",
@@ -58,6 +60,26 @@ const Admin = () => {
         </button>
       ),
     },
+    {
+      key: "action",
+      name: "Edición",
+      width: 150,
+      renderCell: (params) => (
+        <button
+          style={{
+            backgroundColor: "#f7e987",
+            color: "black",
+            border: "none",
+            padding: "5px 10px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => handleEdition(params.row)}
+        >
+          Editar
+        </button>
+      ),
+    },
   ];
 
   const handleLogout = async () => {
@@ -65,6 +87,7 @@ const Admin = () => {
     localStorage.removeItem("userRole");
     window.location.href = "/";
   };
+
   const handleAction = async (id) => {
     if (
       !window.confirm(
@@ -94,12 +117,15 @@ const Admin = () => {
 
   const handleAddCourse = () => {
     setIsModalOpen(true);
+    setIsEditing(false); // Modo de agregar nuevo curso
+    setFormData({ name: "", description: "", imageUrls: [] });
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "", description: "", imageUrls: [] });
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -109,31 +135,62 @@ const Admin = () => {
     e.preventDefault();
     const courseData = {
       ...formData,
-      imageUrls: [],
+      imageUrls: [], // Asumiendo que no se usan imágenes en este ejemplo
     };
 
     try {
-      const response = await fetch("http://localhost:8080/courses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(courseData),
-      });
+      const response = isEditing
+        ? await fetch(`http://localhost:8080/courses/${formData.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(courseData),
+          })
+        : await fetch("http://localhost:8080/courses", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(courseData),
+          });
 
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(errorMessage);
       }
 
-      const newCourse = await response.json();
-      toast.success("¡Curso agregado con éxito!");
-      setCourses((prevCourses) => [...prevCourses, newCourse]);
+      const savedCourse = await response.json();
+      toast.success(
+        isEditing ? "¡Curso editado con éxito!" : "¡Curso agregado con éxito!"
+      );
+
+      setCourses((prevCourses) =>
+        isEditing
+          ? prevCourses.map((course) =>
+              course.id === savedCourse.id ? savedCourse : course
+            )
+          : [...prevCourses, savedCourse]
+      );
 
       handleCloseModal();
     } catch (error) {
-      toast.error(`Error al eliminar el curso: ${error.message}`);
+      toast.error(
+        `Error al ${isEditing ? "editar" : "agregar"} el curso: ${
+          error.message
+        }`
+      );
     }
+  };
+
+  const handleEdition = (course) => {
+    setFormData({
+      id: course.id,
+      name: course.name,
+      description: course.description,
+    });
+    setIsModalOpen(true);
+    setIsEditing(true); // Modo de edición
   };
 
   return (
@@ -143,22 +200,20 @@ const Admin = () => {
         <div className="header">
           <h1>ABM Cursos</h1>
           <div className="header-buttons">
-            {/* Botón Agregar Curso */}
             <button onClick={handleAddCourse} className="button">
               Agregar Curso
             </button>
-            {/* Botón Cerrar Sesión */}
             <button onClick={handleLogout} className="button logout-button">
               Cerrar Sesión
             </button>
           </div>
         </div>
         <DataGrid columns={columns} rows={courses} />
-        {/* Modal para agregar un curso */}
+
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Agregar Nuevo Curso</h2>
+              <h2>{isEditing ? "Editar Curso" : "Agregar Nuevo Curso"}</h2>
               <form onSubmit={handleSaveCourse}>
                 <label>
                   Nombre:
