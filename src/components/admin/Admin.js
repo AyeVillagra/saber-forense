@@ -117,7 +117,7 @@ const Admin = () => {
 
   const handleAddCourse = () => {
     setIsModalOpen(true);
-    setIsEditing(false); // Modo de agregar nuevo curso
+    setIsEditing(false);
     setFormData({ name: "", description: "", imageUrls: [] });
   };
 
@@ -135,7 +135,7 @@ const Admin = () => {
     e.preventDefault();
     const courseData = {
       ...formData,
-      imageUrls: [], // Asumiendo que no se usan imágenes en este ejemplo
+      imageUrls: [],
     };
 
     try {
@@ -190,7 +190,7 @@ const Admin = () => {
       description: course.description,
     });
     setIsModalOpen(true);
-    setIsEditing(true); // Modo de edición
+    setIsEditing(true);
   };
 
   return (
