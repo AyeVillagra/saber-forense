@@ -122,7 +122,6 @@ const AuthForm = () => {
       localStorage.setItem("userRole", responseData.role);
 
       const userRole = responseData.role;
-      console.log("Rol del usuario:", userRole);
       if (userRole === "SYSADMIN") {
         navigate("/sysadmin");
       } else if (userRole === "ADMIN") {
