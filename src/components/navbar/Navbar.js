@@ -1,26 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
   const location = useLocation();
-
-  const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("userData"))
-  );
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      setUserData(JSON.parse(localStorage.getItem("userData")));
+    // Función para verificar si el usuario está autenticado
+    const checkUserAuthentication = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/usuarios/verify-session",
+          {
+            method: "GET",
+            credentials: "include", // Asegura que las cookies de sesión sean enviadas
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data); // Guarda los datos del usuario si está autenticado
+        } else {
+          setUserData(null); // Si no está autenticado, establece userData en null
+        }
+      } catch (error) {
+        console.error("Error al verificar la sesión:", error);
+        setUserData(null); // En caso de error, se considera que no está autenticado
+      }
     };
 
-    // Escucha cambios en localStorage
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+    checkUserAuthentication();
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   // Determina la URL del perfil según el rol
   const getProfileLink = () => {

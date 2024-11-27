@@ -4,12 +4,14 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import "./Courses.css";
 import { useInscriptions } from "../../context/InscriptionContext";
+import { useUser } from "../../context//UserContext";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
-  const [userData] = useState(JSON.parse(localStorage.getItem("userData")));
+  const { userData, login } = useUser();
+
   const navigate = useNavigate();
   const { inscriptions, loadInscriptions } = useInscriptions();
 

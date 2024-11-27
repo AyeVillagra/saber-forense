@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
+import { useUser } from "../../context//UserContext";
+import AuthForm from "../authform/AuthForm";
 
 const Profile = () => {
-  const location = useLocation();
-  const userDetails = location.state;
-  /*const [userDetails] = useState(userData);*/
   const [inscriptions, setInscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user, logout } = useUser(); // Obtenemos el usuario y la función de logout del contexto
 
   const formatDate = (inscriptionDateArray) => {
     const [year, month, day] = inscriptionDateArray;
@@ -36,20 +36,20 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (userDetails) {
-      fetchInscriptions(userDetails.id);
+    if (user) {
+      fetchInscriptions(user.id); // Usamos el id del usuario del contexto
     }
-  }, [userDetails]);
+  }, [user]);
 
-  if (!userDetails) {
-    return <p>No se pudo cargar la información del usuario.</p>;
+  if (!user) {
+    return <AuthForm />; // Si no hay usuario, mostramos el formulario de autenticación
   }
 
   const handleDeleteAccount = async () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta?")) {
       try {
         const response = await fetch(
-          `http://localhost:8080/usuarios/${userDetails.id}`,
+          `http://localhost:8080/usuarios/${user.id}`,
           {
             method: "DELETE",
             headers: {
@@ -66,20 +66,17 @@ const Profile = () => {
           );
           return;
         }
-        localStorage.removeItem("userData");
-        localStorage.removeItem("userRole");
-        alert(data.message);
+
+        logout(); // Usamos la función logout del contexto
         navigate("/");
       } catch (error) {
-        console.error("Error en la eliminación:", error);
         alert("Hubo un problema al intentar eliminar tu cuenta.");
       }
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userData");
-    localStorage.removeItem("userRole");
+    logout(); // Usamos la función logout del contexto
     navigate("/");
   };
 
@@ -129,17 +126,16 @@ const Profile = () => {
         </div>
         <div>
           <p>
-            <strong>Email:</strong> {userDetails.email}
+            <strong>Email:</strong> {user.email}
           </p>
           <p>
-            <strong>Nombre:</strong> {userDetails.name}
+            <strong>Nombre:</strong> {user.name}
           </p>
           <p>
-            <strong>Apellido:</strong> {userDetails.lastName}
+            <strong>Apellido:</strong> {user.lastName}
           </p>
           <p>
-            <strong>Dirección:</strong> {userDetails.address}{" "}
-            {userDetails.addressNumber}
+            <strong>Dirección:</strong> {user.address} {user.addressNumber}
           </p>
         </div>
 

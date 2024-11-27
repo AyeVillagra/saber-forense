@@ -3,9 +3,10 @@ import Navbar from "../navbar/Navbar";
 import "./Home.css";
 import Footer from "../footer/Footer";
 import AuthForm from "../authform/AuthForm";
+import { useUser } from "../../context//UserContext";
 
 function Home() {
-  const isLoggedIn = !!localStorage.getItem("userData");
+  const { isLoggedIn } = useUser();
   return (
     <div className="background-top">
       <Navbar />

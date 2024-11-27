@@ -91,6 +91,7 @@ const AuthForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
+        credentials: "include",
       });
 
       const responseData = await response.json();
