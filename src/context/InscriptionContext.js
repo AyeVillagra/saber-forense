@@ -10,7 +10,6 @@ export const InscriptionProvider = ({ children }) => {
   const { user } = useUser();
 
   const loadInscriptions = async () => {
-    console.log("Usuario actualizado en el inscription context:", user);
     //const userData = JSON.parse(localStorage.getItem("userData"));
     if (!user) {
       setError("No hay usuario logueado");

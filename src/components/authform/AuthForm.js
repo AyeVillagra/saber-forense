@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AuthForm.css";
 import { useUser } from "../../context/UserContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -99,7 +101,7 @@ const AuthForm = () => {
 
       if (!response.ok) {
         if (response.status === 409) {
-          alert(responseData.message);
+          toast.error(responseData.message);
         } else if (response.status === 401) {
           setLoginError(
             "Los datos ingresados son incorrectos, por favor verifíquelos."
@@ -117,7 +119,7 @@ const AuthForm = () => {
       setLoginError("");
 
       if (isRegistering) {
-        alert(responseData.message);
+        toast.success("Usuario agregado con éxito");
       }
 
       /* localStorage.setItem("userData", JSON.stringify(responseData.data));
@@ -245,6 +247,7 @@ const AuthForm = () => {
       <button className="toggle-button" onClick={toggleForm}>
         {isRegistering ? "Iniciar Sesión" : "Registrarse"}
       </button>
+      <ToastContainer />
     </div>
   );
 };
