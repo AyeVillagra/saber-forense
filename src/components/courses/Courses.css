@@ -1,11 +1,11 @@
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  min-height: 100vh;
 }
 
 .content-wrap {
-  flex: 1; /* Esto empuja al footer hacia abajo si el contenido no ocupa suficiente espacio */
+  flex: 1;
 }
 
 .courses-container {
@@ -32,7 +32,11 @@
 .search-bar button {
   padding: 8px 15px;
   cursor: pointer;
-  width: 300px;
+  width: 150px;
+}
+
+.show-all-button {
+  width: 150px;
 }
 
 .error-message {
