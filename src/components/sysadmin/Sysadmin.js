@@ -220,6 +220,50 @@ const SysAdminDashboard = () => {
     handleCloseModal();
   };
 
+  const RoleSelect = ({ setFormData }) => {
+    const [roles, setRoles] = useState([]);
+    const [selectedRole, setSelectedRole] = useState("");
+
+    useEffect(() => {
+      const fetchRoles = async () => {
+        try {
+          const response = await fetch("http://localhost:8080/roles");
+          if (response.ok) {
+            const data = await response.json();
+            setRoles(data); // Actualiza el estado con los roles
+          } else {
+            console.error("Error al obtener los roles");
+          }
+        } catch (error) {
+          console.error("Error de red:", error);
+        }
+      };
+
+      fetchRoles();
+    }, []);
+
+    const handleRoleChange = (e) => {
+      const role = e.target.value;
+      setSelectedRole(role);
+      // Actualiza el estado `formData` con el rol seleccionado
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        role: role,
+      }));
+    };
+
+    return (
+      <select value={selectedRole} onChange={handleRoleChange}>
+        <option value="">Seleccionar...</option>
+        {roles.map((role, index) => (
+          <option key={index} value={role}>
+            {role}
+          </option>
+        ))}
+      </select>
+    );
+  };
+
   return (
     <div className="page-container">
       <div className="background">
@@ -300,18 +344,8 @@ const SysAdminDashboard = () => {
                   />
                 </label>
                 <label>
-                  Tipo de usuario:
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Seleccionar...</option>
-                    <option value="ADMIN">Admin</option>
-                    <option value="SYSADMIN">Sysadmin</option>
-                    <option value="STUDENT">Estudiante</option>
-                  </select>
+                  Rol:
+                  <RoleSelect setFormData={setFormData} />
                 </label>
                 <div className="modal-actions">
                   <button type="submit" className="button">
