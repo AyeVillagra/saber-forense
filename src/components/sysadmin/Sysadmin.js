@@ -284,7 +284,7 @@ const SysAdminDashboard = () => {
                 <label>
                   Número:
                   <input
-                    type="text"
+                    type="number"
                     name="addressNumber"
                     value={formData.addressNumber}
                     onChange={handleInputChange}

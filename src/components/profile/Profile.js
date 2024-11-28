@@ -4,7 +4,6 @@ import "./Profile.css";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 import { useUser } from "../../context//UserContext";
-import NotFound from "../404/NotFound";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -42,10 +41,6 @@ const Profile = () => {
       fetchInscriptions(user.id); // Usamos el id del usuario del contexto
     }
   }, [user]);
-
-  if (!user) {
-    return <NotFound />;
-  }
 
   const handleDeleteAccount = async () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta?")) {
@@ -188,6 +183,7 @@ const Profile = () => {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };
