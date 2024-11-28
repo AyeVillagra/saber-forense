@@ -7,13 +7,24 @@ import Admin from "./components/admin/Admin";
 import NotFound from "./components/404/NotFound";
 import About from "./components/about/About";
 import Courses from "./components/courses/Courses";
+import { useUser } from "./context/UserContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const { user } = useUser();
+
   const router = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/profile", element: <Profile /> },
-    { path: "/sysadmin", element: <SysAdminDashboard /> },
-    { path: "/admin", element: <Admin /> },
+    {
+      path: "/sysadmin",
+      element: user?.role === "SYSADMIN" ? <SysAdminDashboard /> : <NotFound />,
+    },
+    {
+      path: "/admin",
+      element: user?.role === "ADMIN" ? <Admin /> : <NotFound />,
+    },
     { path: "*", element: <NotFound /> },
     { path: "/about", element: <About /> },
     { path: "/courses", element: <Courses /> },
@@ -21,6 +32,7 @@ const App = () => {
 
   return (
     <div>
+      <ToastContainer />
       <RouterProvider router={router} />
     </div>
   );

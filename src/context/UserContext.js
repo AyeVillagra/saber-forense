@@ -5,7 +5,10 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Función para verificar la sesión activa
+  const login = (userData) => {
+    setUser(userData);
+  };
+
   const verifySession = async () => {
     try {
       const response = await fetch("http://localhost:8080/verify-session", {
@@ -13,23 +16,28 @@ export const UserProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Datos del usuario:", data);
         setUser(data);
       } else {
+        console.log(
+          "Error en la verificación. Respuesta no OK:",
+          response.status
+        );
         setUser(null);
       }
     } catch (error) {
       console.error("Error verificando la sesión:", error);
-      setUser(null);
     }
   };
 
   // Función para autenticar al usuario
-  const login = async (credentials) => {
-    try {
+  //const login = async (credentials) => {
+  /*  try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: {
@@ -46,16 +54,21 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error en el login:", error);
-    }
+    } */
+  /* };*/
+
+  const logout = () => {
+    setUser(null);
   };
 
   // Verificar la sesión al cargar el componente
   useEffect(() => {
     verifySession();
-  }, []);
+    console.log("Usuario actualizado en el contexto:", user);
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, login, verifySession }}>
+    <UserContext.Provider value={{ user, login, logout, verifySession }}>
       {children}
     </UserContext.Provider>
   );

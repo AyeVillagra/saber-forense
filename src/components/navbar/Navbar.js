@@ -1,56 +1,29 @@
-import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 import "./Navbar.css";
 
 function Navbar() {
   const location = useLocation();
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    // Función para verificar si el usuario está autenticado
-    const checkUserAuthentication = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8080/usuarios/verify-session",
-          {
-            method: "GET",
-            credentials: "include", // Asegura que las cookies de sesión sean enviadas
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setUserData(data); // Guarda los datos del usuario si está autenticado
-        } else {
-          setUserData(null); // Si no está autenticado, establece userData en null
-        }
-      } catch (error) {
-        console.error("Error al verificar la sesión:", error);
-        setUserData(null); // En caso de error, se considera que no está autenticado
-      }
-    };
-
-    checkUserAuthentication();
-  }, []); // Solo se ejecuta una vez al montar el componente
+  const { user } = useUser();
 
   // Determina la URL del perfil según el rol
   const getProfileLink = () => {
-    if (userData) {
-      if (userData.role === "ADMIN") {
-        return "/admin"; // Si es admin, redirige a /admin
-      } else if (userData.role === "SYSADMIN") {
-        return "/sysadmin"; // Si es sysadmin, redirige a /sysadmin
+    if (user) {
+      if (user.role === "ADMIN") {
+        return "/admin";
+      } else if (user.role === "SYSADMIN") {
+        return "/sysadmin";
       } else {
-        return "/profile"; // Si es estudiante, redirige a /profile
+        return "/profile";
       }
     }
-    return "/"; // Si no hay usuario, redirige al inicio
+    return "/";
   };
 
   return (
     <nav>
       <ul>
-        {userData ? (
+        {user ? (
           location.pathname === "/profile" ||
           location.pathname === "/admin" ||
           location.pathname === "/sysadmin" ? (
@@ -61,9 +34,7 @@ function Navbar() {
           ) : (
             // Si el usuario no está en el perfil, muestra el enlace a "Mi Perfil"
             <li>
-              <Link to={getProfileLink()} state={userData}>
-                Mi Perfil
-              </Link>
+              <Link to={getProfileLink()}>Mi Perfil</Link>
             </li>
           )
         ) : (

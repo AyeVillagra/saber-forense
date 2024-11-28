@@ -4,14 +4,16 @@ import "./Profile.css";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 import { useUser } from "../../context//UserContext";
-import AuthForm from "../authform/AuthForm";
+import NotFound from "../404/NotFound";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
   const [inscriptions, setInscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { user, logout } = useUser(); // Obtenemos el usuario y la función de logout del contexto
+  const { user, logout } = useUser();
 
   const formatDate = (inscriptionDateArray) => {
     const [year, month, day] = inscriptionDateArray;
@@ -42,7 +44,7 @@ const Profile = () => {
   }, [user]);
 
   if (!user) {
-    return <AuthForm />; // Si no hay usuario, mostramos el formulario de autenticación
+    return <NotFound />;
   }
 
   const handleDeleteAccount = async () => {
@@ -61,22 +63,23 @@ const Profile = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          alert(
+          toast.error(
             data.message || "Hubo un error al intentar eliminar la cuenta."
           );
           return;
         }
 
-        logout(); // Usamos la función logout del contexto
+        toast.success("Cuenta eliminada con éxito.");
+        logout();
         navigate("/");
       } catch (error) {
-        alert("Hubo un problema al intentar eliminar tu cuenta.");
+        toast.error("Hubo un problema al intentar eliminar tu cuenta.");
       }
     }
   };
 
   const handleLogout = () => {
-    logout(); // Usamos la función logout del contexto
+    logout(); // logout del contexto
     navigate("/");
   };
 
@@ -91,9 +94,13 @@ const Profile = () => {
           },
         }
       );
-
-      if (!response.ok) {
-        throw new Error("No se pudo dar de baja la inscripción.");
+      console.log(response);
+      if (response.ok) {
+        if (response.status === 204) {
+          toast.success("Inscripción dada de baja con éxito.");
+        }
+      } else {
+        toast.error("No pudimos procesar la baja del curso.");
       }
 
       setInscriptions((prevInscriptions) =>
@@ -105,7 +112,7 @@ const Profile = () => {
       );
     } catch (error) {
       console.error("Error al dar de baja:", error);
-      alert("Hubo un problema al intentar dar de baja.");
+      toast.error("Hubo un problema al intentar dar de baja la inscripción.");
     }
   };
 

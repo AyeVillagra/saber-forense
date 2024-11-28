@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AuthForm.css";
+import { useUser } from "../../context/UserContext";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +20,7 @@ const AuthForm = () => {
   };
 
   const navigate = useNavigate();
+  const { login, user } = useUser();
 
   const validateForm = () => {
     const formErrors = {};
@@ -121,6 +123,7 @@ const AuthForm = () => {
 
       localStorage.setItem("userData", JSON.stringify(responseData.data));
       localStorage.setItem("userRole", responseData.role);
+      login(responseData.data);
 
       const userRole = responseData.role;
       if (userRole === "SYSADMIN") {

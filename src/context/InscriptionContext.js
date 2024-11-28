@@ -1,9 +1,7 @@
 import React, { createContext, useState, useContext } from "react";
 
-// Crear el contexto
 const InscriptionContext = createContext();
 
-// Proveedor de Inscripción
 export const InscriptionProvider = ({ children }) => {
   const [inscriptions, setInscriptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,5 +34,4 @@ export const InscriptionProvider = ({ children }) => {
   );
 };
 
-// Hook para usar el contexto
 export const useInscriptions = () => useContext(InscriptionContext);
