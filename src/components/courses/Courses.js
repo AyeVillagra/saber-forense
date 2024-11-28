@@ -5,19 +5,21 @@ import Footer from "../footer/Footer";
 import "./Courses.css";
 import { useInscriptions } from "../../context/InscriptionContext";
 import { useUser } from "../../context//UserContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
-  const { userData, login } = useUser();
+  const { user } = useUser();
 
   const navigate = useNavigate();
   const { inscriptions, loadInscriptions } = useInscriptions();
 
   const searchCourseByName = async (name) => {
     if (name.trim() === "") {
-      setError("Por favor, ingrese un nombre de curso");
+      alert("Por favor, ingrese el nombre de un curso"); // No funciona el set error, el mensaje dura poco tiempo, no se alcanza a ver
       return;
     }
 
@@ -42,7 +44,6 @@ function Courses() {
     } catch (error) {
       console.error("Error fetching course:", error);
       setError("Curso no encontrado");
-      setCourses([]);
     }
   };
 
@@ -71,13 +72,8 @@ function Courses() {
   };
 
   const handleSubscribe = async (courseId) => {
-    if (!userData) {
-      alert("Debes iniciar sesión para inscribirte en un curso.");
-      return;
-    }
-
     const inscriptionData = {
-      user: { id: userData.id },
+      user: { id: user.id },
       course: { id: courseId },
       active: true,
     };
@@ -93,24 +89,30 @@ function Courses() {
 
       const data = await response.json();
       if (!response.ok) {
-        alert(data.message || "Hubo un error al inscribirse.");
+        toast.error(
+          data.message ||
+            "No pudimos procesar tu inscripción. Por favor, intenta nuevamente."
+        );
         return;
       }
 
-      alert(data.message || "Te has inscrito correctamente.");
-      navigate("/profile", { state: userData });
+      toast.success("¡Te has inscripto con éxito!");
+      navigate("/profile", { state: user });
     } catch (error) {
       console.error("Error al inscribirse:", error);
-      alert("Hubo un problema al intentar inscribirte.");
+      toast.error(
+        "Ocurrió un problema al inscribirte. Por favor, intenta más tarde."
+      );
     }
   };
 
   useEffect(() => {
-    fetchCourses(); // Esto se ejecuta al cargar el componente
-    if (userData) {
-      loadInscriptions(); // Cargar inscripciones solo si hay usuario
+    fetchCourses();
+    console.log(user);
+    if (user) {
+      loadInscriptions();
     }
-  }, [userData]); // Solo depende de userData, no de loadInscriptions
+  }, [user]);
 
   const handleShowAllCourses = () => {
     fetchCourses();
@@ -135,7 +137,7 @@ function Courses() {
               type="text"
               placeholder="Buscar por nombre de curso"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el estado del término de búsqueda
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button onClick={() => searchCourseByName(searchTerm)}>
               Buscar
@@ -163,13 +165,13 @@ function Courses() {
                     ) : (
                       <p>No hay imagen disponible</p>
                     )}
-                    {userData && (
+                    {user && user.role === "student" && (
                       <button
                         onClick={() => handleSubscribe(course.id)}
                         disabled={isUserSubscribed(course.id)}
                       >
                         {isUserSubscribed(course.id)
-                          ? "Ya estás inscrito"
+                          ? "Inscripto"
                           : "Inscribirme"}
                       </button>
                     )}
@@ -179,6 +181,7 @@ function Courses() {
           </ul>
         </div>
       </div>
+      <ToastContainer />
       <Footer />
     </div>
   );

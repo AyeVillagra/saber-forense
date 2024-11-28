@@ -6,13 +6,14 @@ import AuthForm from "../authform/AuthForm";
 import { useUser } from "../../context//UserContext";
 
 function Home() {
-  const { isLoggedIn } = useUser();
+  const { user } = useUser();
+  console.log(user);
   return (
     <div className="background-top">
       <Navbar />
       <div className="content">
         <h1 className="title">Saber Forense</h1>
-        {!isLoggedIn && <AuthForm />}
+        {!user ? <AuthForm /> : null}
       </div>
 
       <div className="columns">

@@ -5,6 +5,8 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../../context//UserContext";
+import { useNavigate } from "react-router-dom";
 
 const SysAdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -18,6 +20,8 @@ const SysAdminDashboard = () => {
     role: "",
     password: "12345678",
   });
+  const { logout } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -166,9 +170,8 @@ const SysAdminDashboard = () => {
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem("userData");
-    localStorage.removeItem("userRole");
-    window.location.href = "/";
+    logout();
+    navigate("/");
   };
 
   const handleAddUser = () => {
@@ -284,10 +287,15 @@ const SysAdminDashboard = () => {
                 <label>
                   Número:
                   <input
-                    type="number"
+                    type="text"
                     name="addressNumber"
                     value={formData.addressNumber}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        handleInputChange(e);
+                      }
+                    }}
                     required
                   />
                 </label>

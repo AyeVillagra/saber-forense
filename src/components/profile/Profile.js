@@ -38,7 +38,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      fetchInscriptions(user.id); // Usamos el id del usuario del contexto
+      fetchInscriptions(user.id);
     }
   }, [user]);
 

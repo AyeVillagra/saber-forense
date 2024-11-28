@@ -198,7 +198,7 @@ const Admin = () => {
       <div className="background">
         <Navbar />
         <div className="header">
-          <h1>ABM Cursos</h1>
+          <h1>Dashboard Docente</h1>
           <div className="header-buttons">
             <button onClick={handleAddCourse} className="button">
               Agregar Curso
