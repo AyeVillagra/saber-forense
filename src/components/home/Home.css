@@ -2,7 +2,7 @@
   background-color: #252b48;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Asegura que el contenedor ocupe al menos el 100% de la altura de la pantalla */
+  min-height: 100vh;
 }
 
 .content {
@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   margin-right: 110px;
-  margin-bottom: auto; /* Esto empuja el footer hacia el final cuando el contenido es pequeño */
+  margin-bottom: auto;
 }
 
 .title {

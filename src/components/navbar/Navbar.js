@@ -6,7 +6,6 @@ function Navbar() {
   const location = useLocation();
   const { user } = useUser();
 
-  // Determina la URL del perfil según el rol
   const getProfileLink = () => {
     if (user) {
       if (user.role === "ADMIN") {

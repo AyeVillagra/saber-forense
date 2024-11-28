@@ -20,25 +20,23 @@
 /* Contenedor de los botones para alinearlos a la derecha */
 .header-buttons {
   display: flex;
-  gap: 10px; /* Espaciado uniforme entre botones */
+  gap: 10px;
 }
 
-/* Botones con el mismo tamaño */
 .button {
-  background-color: #4caf50; /* Verde (default para "Agregar Curso") */
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
   font-weight: bold;
   border-radius: 5px;
-  width: 150px; /* Tamaño uniforme para los botones */
+  width: 150px;
   text-align: center;
 }
 
-/* Botón "Cerrar Sesión" con estilo rojo */
 .logout-button {
-  background-color: #ff4d4d; /* Rojo */
+  background-color: #ff4d4d;
 }
 
 .footer {
@@ -63,7 +61,6 @@
   z-index: 1000;
 }
 
-/* Modal Content */
 .modal-content {
   background-color: white;
   padding: 20px;
@@ -73,7 +70,6 @@
   max-width: 90%;
 }
 
-/* Modal Actions */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
