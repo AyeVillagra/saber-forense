@@ -45,10 +45,9 @@ const AuthForm = () => {
         formErrors.address = "La dirección es obligatoria.";
       }
       if (!addressNumber) {
-        formErrors.addressNumber = "El número de dirección es obligatorio.";
+        formErrors.addressNumber = "El número de calle es obligatorio.";
       } else if (!/^\d+$/.test(addressNumber)) {
-        formErrors.addressNumber =
-          "El número de dirección debe ser un número válido.";
+        formErrors.addressNumber = "El número de calle no es válido.";
       }
     }
 
@@ -121,8 +120,8 @@ const AuthForm = () => {
         alert(responseData.message);
       }
 
-      localStorage.setItem("userData", JSON.stringify(responseData.data));
-      localStorage.setItem("userRole", responseData.role);
+      /* localStorage.setItem("userData", JSON.stringify(responseData.data));
+      localStorage.setItem("userRole", responseData.role); */
       login(responseData.data);
 
       const userRole = responseData.role;

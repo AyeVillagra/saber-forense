@@ -6,6 +6,8 @@ import "./Admin.css";
 import Footer from "../footer/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../../context//UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const [courses, setCourses] = useState([]);
@@ -16,6 +18,8 @@ const Admin = () => {
     imageUrls: [],
   });
   const [isEditing, setIsEditing] = useState(false);
+  const { logout } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -83,9 +87,8 @@ const Admin = () => {
   ];
 
   const handleLogout = async () => {
-    localStorage.removeItem("userData");
-    localStorage.removeItem("userRole");
-    window.location.href = "/";
+    logout();
+    navigate("/");
   };
 
   const handleAction = async (id) => {
