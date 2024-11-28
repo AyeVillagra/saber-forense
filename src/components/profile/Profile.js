@@ -4,41 +4,32 @@ import "./Profile.css";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
 import { useUser } from "../../context//UserContext";
+import { useInscriptions } from "../../context//InscriptionContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
-  const [inscriptions, setInscriptions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  //const [inscriptions, setInscriptions] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  //const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user, logout } = useUser();
+  const {
+    inscriptions = [],
+    loading,
+    error,
+    loadInscriptions,
+    unsubscribe,
+  } = useInscriptions();
 
   const formatDate = (inscriptionDateArray) => {
     const [year, month, day] = inscriptionDateArray;
     return new Date(year, month - 1, day);
   };
 
-  const fetchInscriptions = async (userId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/inscripciones/usuario/${userId}`
-      );
-      if (!response.ok) {
-        throw new Error("Error al obtener inscripciones");
-      }
-      const data = await response.json();
-      setInscriptions(data);
-      setLoading(false);
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (user) {
-      fetchInscriptions(user.id);
+    if (user && inscriptions.length === 0) {
+      loadInscriptions();
     }
   }, [user]);
 
@@ -98,13 +89,7 @@ const Profile = () => {
         toast.error("No pudimos procesar la baja del curso.");
       }
 
-      setInscriptions((prevInscriptions) =>
-        prevInscriptions.map((inscription) =>
-          inscription.id === inscriptionId
-            ? { ...inscription, active: false } // Marcar la inscripción como inactiva
-            : inscription
-        )
-      );
+      unsubscribe(inscriptionId);
     } catch (error) {
       console.error("Error al dar de baja:", error);
       toast.error("Hubo un problema al intentar dar de baja la inscripción.");

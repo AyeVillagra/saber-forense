@@ -38,20 +38,19 @@
   padding: 5px 10px;
   cursor: pointer;
   margin-top: 10px;
+  width: 100px;
 }
 
 .unsubscribe-button:hover {
   background-color: darkred;
 }
 
-/* Asegúrate de que el contenedor principal usa flexbox */
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Garantiza que ocupe al menos el 100% de la altura de la ventana */
+  min-height: 100vh;
 }
 
-/* La clase .background debe ocupar el espacio disponible */
 .background {
   flex: 1; /* Esto hace que el contenido principal se expanda para llenar el espacio disponible */
   padding: 20px;
@@ -63,5 +62,5 @@
   height: 100px;
   width: 100%;
   text-align: center;
-  position: relative; /* Asegúrate de que el footer no se quede fijo en la parte inferior */
+  position: relative;
 }

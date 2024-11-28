@@ -31,9 +31,19 @@ export const InscriptionProvider = ({ children }) => {
     }
   };
 
+  const unsubscribe = (inscriptionId) => {
+    setInscriptions((prevInscriptions) =>
+      prevInscriptions.map((inscription) =>
+        inscription.id === inscriptionId
+          ? { ...inscription, active: false }
+          : inscription
+      )
+    );
+  };
+
   return (
     <InscriptionContext.Provider
-      value={{ inscriptions, loading, error, loadInscriptions }}
+      value={{ inscriptions, loading, error, loadInscriptions, unsubscribe }}
     >
       {children}
     </InscriptionContext.Provider>

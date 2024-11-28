@@ -39,7 +39,7 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Verificar la sesión al cargar el componente
+  // la función verifySession() se ejecuta cada vez que el estado de user cambia
   useEffect(() => {
     verifySession();
     console.log("Usuario actualizado en el contexto:", user);
