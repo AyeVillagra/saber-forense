@@ -165,7 +165,7 @@ function Courses() {
                     ) : (
                       <p>No hay imagen disponible</p>
                     )}
-                    {user && user.role === "student" && (
+                    {user && user.role === "STUDENT" && (
                       <button
                         onClick={() => handleSubscribe(course.id)}
                         disabled={isUserSubscribed(course.id)}
