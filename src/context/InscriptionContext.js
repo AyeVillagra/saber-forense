@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useUser } from "./UserContext";
 
 const InscriptionContext = createContext();
@@ -10,6 +10,7 @@ export const InscriptionProvider = ({ children }) => {
   const { user } = useUser();
 
   const loadInscriptions = async () => {
+    console.log("Usuario actualizado en el inscription context:", user);
     //const userData = JSON.parse(localStorage.getItem("userData"));
     if (!user) {
       setError("No hay usuario logueado");
@@ -40,6 +41,12 @@ export const InscriptionProvider = ({ children }) => {
       )
     );
   };
+
+  useEffect(() => {
+    if (user) {
+      loadInscriptions(); // Llama a loadInscriptions solo si hay un usuario
+    }
+  }, [user]);
 
   return (
     <InscriptionContext.Provider

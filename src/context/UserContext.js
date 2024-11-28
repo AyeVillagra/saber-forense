@@ -53,25 +53,3 @@ export const UserProvider = ({ children }) => {
 };
 
 export const useUser = () => useContext(UserContext);
-
-// Función para autenticar al usuario
-//const login = async (credentials) => {
-/*  try {
-      const response = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setUser(data); // Si el login es exitoso, se guarda el usuario en el estado
-      } else {
-        throw new Error(data.message || "Error en el login");
-      }
-    } catch (error) {
-      console.error("Error en el login:", error);
-    } */
-/* };*/

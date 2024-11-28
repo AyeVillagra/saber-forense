@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import Footer from "../footer/Footer";
@@ -9,9 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
-  //const [inscriptions, setInscriptions] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  //const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user, logout } = useUser();
   const {
